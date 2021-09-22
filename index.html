@@ -1,0 +1,72 @@
+    <!--
+        websQL is client side(Browser) database.
+
+        by using WEBSQL api,we can apply sql queries at clinet side(Browser).
+
+        1) opendatabase()
+        2) transaction()
+        3) executesQl()
+    -->
+
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>web Sql</title>  
+    </head>
+    <body>
+    </body>
+    <script>
+
+
+    let dbObj = openDatabase("ui-10am",1.0,"testdatabase",2*1024*1024);
+      dbObj.transaction(function(txn){
+
+       txn.executeSql("create table products (p_id unique, p_name varchar(20), p_cost number, p_image varchar(20))");
+       txn.executeSql("insert into products (p_id, p_name, P_cost, p_image) values (1,'shirt1',1000,'p1.jpg')");
+       txn.executeSql("insert into products (p_id, p_name, P_cost, p_image) values (2,'shirt2',1000,'https://rukminim1.flixcart.com/image/880/1056/kc0u7bk0/shirt/k/a/a/m-pk19sh09g-surhi-original-imaft8vgvhmhbhsy.jpeg?q=50')");
+       txn.executeSql("insert into products (p_id, p_name, P_cost, p_image) values (3,'shirt3',1000,'https://rukminim1.flixcart.com/image/880/1056/kpydrbk0/shirt/g/9/p/s-black-5-jai-textiles-original-imag42m5hcfue7np.jpeg?q=50')");
+       txn.executeSql("insert into products (p_id, p_name, p_cost, p_image) values (4,'pant1',1000,'https://rukminim1.flixcart.com/image/880/1056/kcxpbww0/short/d/5/m/xxl-tbl-shortt-tripr-original-imaftyjftae4n2mp.jpeg?q=50')");
+       txn.executeSql("insert into products (p_id, p_name, p_cost, p_image) values (5,'pant2',1000,'https://rukminim1.flixcart.com/image/880/1056/kcxpbww0/short/f/p/j/xxl-tgy-shortt-tripr-original-imaftyjfkk6y8ff4.jpeg?q=50')");
+       txn.executeSql("insert into products (p_id, p_name, p_cost, p_image) values (6,'pant3',1000,'https://rukminim1.flixcart.com/image/880/1056/km2clu80/short/f/e/n/34-hlv8000466-highlander-original-imagffxfu4eqetrn.jpeg?q=50')");
+    });
+       
+     dbObj.transaction(function(tx){
+         document.write(`<table border="1"
+                                align="center"
+                                cellpadding="10px"
+                                cellspacing="10px">
+
+        <tr>
+           <th>P_ID</th>
+           <th>P_NAME</th>
+           <th>P_COST</th>
+           <th>P-IMAGE</th>
+        </tr>`)
+       
+         tx.executeSql("select * from products",[],function(tx,result){
+            
+                
+              for(let i=0;i<result.rows.length;i++){
+                  let rec = result.rows[i];
+                  document.write(`   
+                  <tr>
+
+                      
+                      <td>${rec.p_id}</td>
+                      <td>${rec.p_name}</td>
+                      <td>${rec.p_cost}</td>
+                      <td><img width="100px" height="100px"src=${rec.p_image}</td>
+                 </tr>
+                 `);
+              }
+
+            document.write(`</table>`);
+         });
+
+     });
+
+    </script>
+</html>
